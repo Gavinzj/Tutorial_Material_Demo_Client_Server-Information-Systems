@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SEEM5760 DEM0</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="mystyle.css">
+    <link rel="stylesheet" type="text/css" href="infowindow.css">
+    <script src="google_map.js"></script>
+    <script src="domlistener.js"></script>
+    
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://masonry.desandro.com/masonry.pkgd.min.js"></script>
+    <script>
+    
+        var myresult, apiurl_size, selected_size;
+        var pictureNumber;
+        
+        $(document).ready(function () {
+            $('#button').attr("disabled", true);
+        });
+
+        // large button
+        $(document).ready(function () {
+            $("#lg-sq").click(function () {
+                selected_size = 150;
+                
+                pictureNumber = document.getElementById("pictureNumber").value;
+            	
+                $('#sq,#lg-sq,#thumb,#small,#mid,#ori').attr("disabled", true);
+                $('#button').removeAttr('disabled');
+            })
+        });
+
+        // original button
+        $(document).ready(function () {
+            $("#ori").click(function () {
+                selected_size = 640;
+                
+                pictureNumber = document.getElementById("pictureNumber").value;
+            	
+                $('#sq,#lg-sq,#thumb,#small,#mid,#ori').attr("disabled", true);
+                $('#button').removeAttr('disabled');
+            })
+        });
+
+        // medium button
+        $(document).ready(function () {
+            $("#mid").click(function () {
+                selected_size = 500;
+                
+                pictureNumber = document.getElementById("pictureNumber").value;
+                
+                $('#sq,#lg-sq,#thumb,#small,#mid,#ori').attr("disabled", true);
+                $('#button').removeAttr('disabled');
+            })
+        });
+
+        // small button
+        $(document).ready(function () {
+            $("#small").click(function () {
+                selected_size = 240;
+                
+                pictureNumber = document.getElementById("pictureNumber").value;
+            	
+                $('#sq,#lg-sq,#thumb,#small,#mid,#ori').attr("disabled", true);
+                $('#button').removeAttr('disabled');
+            })
+        });
+
+        // thumbnail button
+        $(document).ready(function () {
+            $("#thumb").click(function () {
+                selected_size = 100;
+                
+                pictureNumber = document.getElementById("pictureNumber").value;
+            	
+                $('#sq,#lg-sq,#thumb,#small,#mid,#ori').attr("disabled", true);
+                $('#button').removeAttr('disabled');
+            })
+        });
+
+        // reset button
+        $(document).ready(function () {
+            $("#reset").click(function () {
+                $("#results").html('');
+            	
+                $('#button').attr("disabled", true);
+                $('#sq,#lg-sq,#thumb,#small,#mid,#ori').removeAttr('disabled');
+            })
+        });
+
+        $(document).ready(function () {
+            $('#button').click(function () {
+                $.getJSON("https://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=Use_Your_Own_Key&per_page="+ pictureNumber +"&format=json&nojsoncallback=1", function (json) {
+                  $.each(json.photos.photo, function (i, myresult) {
+                        apiurl_size = "https://api.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=Use_Your_Own_Key&photo_id=" + myresult.id + "&format=json&nojsoncallback=1";
+                        
+                        apiurl_info = "https://api.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key=Use_Your_Own_Key&photo_id=" + myresult.id + "&format=json&nojsoncallback=1";
+                        
+                        $.getJSON(apiurl_size, function (size) {
+                            $.each(size.sizes.size, function (i, myresult_size) {
+
+                                if (myresult_size.width == selected_size) {
+                                	
+                                	$.getJSON(apiurl_info, function (info) {
+                                        
+                                    	$("#results").append('<p> Owner: ' + info.photo.owner.username + '</p>');
+                                    	$("#results").append('<p> Owner Location: ' + info.photo.owner.location + '</p>');
+                                      $("#results").append('<p> Time Taken: ' + info.photo.dates.taken + '</p>');
+                                      $("#results").append('<p><a href="' + myresult_size.url + '" target="_blank"><img src="' + myresult_size.source + '"/></a></p>');
+                                           
+                                    })
+                                }
+                            })
+                        })
+                    });
+                });
+            });
+        });
+    </script>
+  </head>
+
+  <body>
+   
+   <div id = "menu">
+   SEEM5760 DEM0
+   </div>
+
+    <div id="querypanel">
+      
+      <b>Google Maps</b> <br>
+      Coordinate: <br>
+      <input id="h_info1" type="text" placeholder="Coordinate" autocomplete="off"> <br>
+      Place ID: <br>
+      <input id="h_info2" type="text"  placeholder="Place ID" autocomplete="off"><br>
+      Address: <br>
+      <input id="h_info3" type="text"  placeholder="Address" autocomplete="off"><br>
+	    <input id="get-info" type="button" value="Get Information" /><br>
+
+
+      Radius (meters): <br>
+      <input id="h_info4" type="text" placeholder="e.g., 100" autocomplete="off"> <br>
+      Keywords: <br>
+      <input id="h_info5" type="text" placeholder="e.g., restaurant,food" autocomplete="off"> <br>
+      <input id="get-places" type="button" value="Search for Places" /><br>
+
+    </div>
+
+    
+    <div id="querypanel1">
+      
+      <b>Flickr</b> <br>
+      Maximum # of pictures: <br>
+      <input id="pictureNumber" type="text" placeholder="e.g., 10" autocomplete="off"> <br> 
+      
+      Select the Picture Size: <br>
+      <button type="button" class="btn btn-primary" id="lg-sq">Large Square</button>
+      <button type="button" class="btn btn-primary" id="ori">Original</button>
+      <button type="button" class="btn btn-primary" id="mid">Medium</button>
+      <button type="button" class="btn btn-primary" id="small">Small</button>
+      <button type="button" class="btn btn-primary" id="thumb">Thumbnail</button>
+        
+      <div>
+        <hr>
+          <input id="button" type="button" value="Fetch Recent Photos"><hr>
+          <button type="button" class="btn btn-primary" id="reset">Reset</button><hr>
+      </div>
+        
+      <div id="pictures">
+	        <div id="results"></div>
+      </div><br>
+
+	  </div>
+	 
+    <div id="map"></div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=Use_Your_Own_Key&v=3.20&libraries=places&callback=initMap"
+    async defer></script>   <!-- maps.googleapis.com -->
+	 
+
+	 
+  </body>
+</html>

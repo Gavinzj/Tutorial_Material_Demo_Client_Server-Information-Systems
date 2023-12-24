@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SEEM5760 DEM0</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="mystyle.css">
+    <link rel="stylesheet" type="text/css" href="infowindow.css">
+    <script src="google_map.js"></script>
+    <script src="domlistener.js"></script>
+    
+  </head>
+
+  <body>
+   
+   <div id = "menu">
+   SEEM5760 DEM0
+   </div>
+
+    <div id="querypanel">
+      
+      <b>Google Maps</b> <br>
+      Coordinate: <br>
+      <input id="h_info1" type="text" placeholder="Coordinate" autocomplete="off"> <br>
+      Place ID: <br>
+      <input id="h_info2" type="text"  placeholder="Place ID" autocomplete="off"><br>
+      Address: <br>
+      <input id="h_info3" type="text"  placeholder="Address" autocomplete="off"><br>
+	    <input id="get-info" type="button" value="Get Information" /><br>
+
+
+      Radius (meters): <br>
+      <input id="h_info4" type="text" placeholder="e.g., 100" autocomplete="off"> <br>
+      Keywords: <br>
+      <input id="h_info5" type="text" placeholder="e.g., restaurant,food" autocomplete="off"> <br>
+      <input id="get-places" type="button" value="Search for Places" /><br>
+
+    </div>
+
+    
+    <div id="querypanel1">
+      <b>Flickr</b> <br>
+
+	  </div>
+	 
+    <div id="map"></div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=Use_Your_Own_Key&v=3.20&libraries=places&callback=initMap"
+    async defer></script>   <!-- maps.googleapis.com -->
+	 
+
+	 
+  </body>
+</html>
